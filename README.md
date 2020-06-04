@@ -1,6 +1,9 @@
 # jump
-## jump scripts for raspberry pi
+## Jump scripts for Raspberry Pi
+### How to use:
 
 
-## For Google Spreadsheet:
+
+## Prerequisits
+### For Google Spreadsheet:
 sudo pip install --upgrade google-api-python-client oauth2client
