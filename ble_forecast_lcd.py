@@ -44,6 +44,38 @@ GPIO.setup(human_pin, GPIO.IN)
 human_count = 0
 human_check = 3
 
+import json
+import datetime
+import os
+import requests
+import sys
+
+from pytz import timezone
+
+API_KEY = "xxx"
+ZIP = "123-4567,JP"
+API_URL = "http://api.openweathermap.org/data/2.5/forecast?zip={0}&units=metric&lang=ja&APPID={1}"
+
+def getWeatherForecast():
+    url = API_URL.format(ZIP, API_KEY)
+    response = requests.get(url)
+    forecastData = json.loads(response.text)
+    if not ('list' in forecastData):
+            print('error')
+            return                        
+    #print(forecastData)
+    for item in forecastData['list']:
+        forecastDatetime = timezone('Asia/Tokyo').localize(datetime.datetime.fromtimestamp(item['dt']))
+        weatherDescription = item['weather'][0]['description']
+        temperature = item['main']['temp']
+        rainfall = 0
+        if 'rain' in item and '3h' in item['rain']:
+            rainfall = item['rain']['3h']
+        break
+
+    print('Date:{0} Weather:{1} Temp:{2} C Rain:{3}mm'.format(
+                          
+
 def payval(num, bytes=1, sign=False):
     global val
     a = 0
