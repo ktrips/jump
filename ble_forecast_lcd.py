@@ -1,9 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
-
 from __future__ import (division, absolute_import, print_function,
                                 unicode_literals)
-
 import fcntl
 import socket
 import struct
@@ -23,7 +21,6 @@ def get_addr(ifname):
     except IOError:
         return 'Not Found!'
 
-
 eth0 = get_addr('eth0')
 host = socket.gethostname()
 
@@ -36,7 +33,6 @@ import getpass
 from time import sleep
 
 import os
-
 import RPi.GPIO as GPIO
 human_pin = 13
 GPIO.setmode(GPIO.BCM)
@@ -46,7 +42,6 @@ human_check = 3
 
 import json
 import datetime
-import os
 import requests
 import sys
 
@@ -73,8 +68,8 @@ def getWeatherForecast():
             rainfall = item['rain']['3h']
         break
 
-    print('Date:{0} Weather:{1} Temp:{2} C Rain:{3}mm'.format(
-                          
+    print('Date:{0} Weather:{1} Temp:{2} C Rain:{3}mm'.format(forecastDatetime, weatherDescription, temperature, rainfall)
+    return forecastDatetime, weatherDescription, temperature, rainfall
 
 def payval(num, bytes=1, sign=False):
     global val
@@ -133,44 +128,17 @@ while True:
                 sensors['ID'] = hex(payval(2,2))
                 sensors['Temperature'] = -45 + 175 * payval(4,2) / 65536
                 sensors['Humidity'] = 100 * payval(6,2) / 65536
-                """sensors['SEQ'] = payval(8)
-                sensors['Condition Flags'] = bin(int(val[16:18],16))
-                sensors['Accelerometer X'] = payval(10,2,True) / 4096
-                sensors['Accelerometer Y'] = payval(12,2,True) / 4096
-                sensors['Accelerometer Z'] = payval(14,2,True) / 4096
-                sensors['Accelerometer'] = (sensors['Accelerometer X'] ** 2\
-                                          + sensors['Accelerometer Y'] ** 2\
-                                          + sensors['Accelerometer Z'] ** 2) ** 0.5
-                sensors['Geomagnetic X'] = payval(16,2,True) / 10
-                sensors['Geomagnetic Y'] = payval(18,2,True) / 10
-                sensors['Geomagnetic Z'] = payval(20,2,True) / 10
-                sensors['Geomagnetic']  = (sensors['Geomagnetic X'] ** 2\
-                                         + sensors['Geomagnetic Y'] ** 2\
-                                         + sensors['Geomagnetic Z'] ** 2) ** 0.5"""
                 sensors['Pressure'] = payval(22,3) / 2048
                 sensors['Illuminance'] = payval(25,2) / 1.2
-                """sensors['Magnetic'] = hex(payval(27))
-                sensors['Steps'] = payval(28,2)"""
                 sensors['Battery Level'] = payval(30)
                 sensors['RSSI'] = dev.rssi
 
                 # 画面へ表示
                 print('    ID            =',sensors['ID'])
-                #print('    SEQ           =',sensors['SEQ'])
                 print('    Temperature   =',round(sensors['Temperature'],2),'℃')
                 print('    Humidity      =',round(sensors['Humidity'],2),'%')
                 print('    Pressure      =',round(sensors['Pressure'],3),'hPa')
                 print('    Illuminance   =',round(sensors['Illuminance'],1),'lx')
-                """print('    Accelerometer =',round(sensors['Accelerometer'],3),'g (',\
-                                            round(sensors['Accelerometer X'],3),\
-                                            round(sensors['Accelerometer Y'],3),\
-                                            round(sensors['Accelerometer Z'],3),'g)')
-                print('    Geomagnetic   =',round(sensors['Geomagnetic'],1),'uT (',\
-                                            round(sensors['Geomagnetic X'],1),\
-                                            round(sensors['Geomagnetic Y'],1),\
-                                            round(sensors['Geomagnetic Z'],1),'uT)')
-                print('    Magnetic      =',sensors['Magnetic'])
-                print('    Steps         =',sensors['Steps'],'歩')"""
                 print('    Battery Level =',sensors['Battery Level'],'%')
                 print('    RSSI          =',sensors['RSSI'],'dB')
 
@@ -186,7 +154,6 @@ while True:
                 backlight.rgb(0, 0, 0)
                 if temp > 28 or humid > 80:
                     temp_msg = "Hot!"
-                    #dothat.backlight.single_rgb(1, 255, 0, 0)
                     backlight.rgb(255, 0, 0)
                 else:
                     temp_msg = "Comfort"
@@ -194,12 +161,10 @@ while True:
                 if illum < 300:
                     illum_msg = "Dark!"
                     os.system("sudo hub-ctrl -b 1 -d 2 -P 2 -p 1")
-                    #dothat.backlight.single_rgb(2, 255, 255, 255)
                     backlight.rgb(255, 255, 255)
                 else:
                     illum_msg = "Bright"
                     os.system("sudo hub-ctrl -b 1 -d 2 -P 2 -p 0")
-                    #dothat.backlight.single_rgb(2, 0, 0, 255)
                     backlight.rgb(0, 0, 255)
 
                 human_msg = str(human_count)
@@ -209,12 +174,10 @@ while True:
                 if human_count > human_check:
                     human_msg += ' Take Rest!'
                     lcd.clear()
-                    #dothat.backlight.single_rgb(3, 0, 255, 0)
                     backlight.rgb(0, 255, 0)
                 else:
                     human_msg += ' Work Hard!'
                     lcd.clear()
-                    #dothat.backlight.single_rgb(3, 0, 255, 255)
                     backlight.rgb(0, 255, 255)
 
                 lcd.clear()
@@ -224,4 +187,5 @@ while True:
                 lcd.write('I:{0:1.0f} Lx {1}'.format(illum,illum_msg))
                 lcd.set_cursor_position(0, 2)
                 lcd.write('H:{}'.format(human_msg))
+          
                 sleep(interval)
