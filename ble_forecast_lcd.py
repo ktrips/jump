@@ -30,9 +30,10 @@ import sys
 
 from pytz import timezone
 
-API_KEY = "xxx"
-ZIP = "123-4567,JP"
+API_KEY = "xxx" #WeatherMap API Key
+ZIP = "123-4567,JP" #Your address
 API_URL = "http://api.openweathermap.org/data/2.5/forecast?zip={0}&units=metric&lang=ja&APPID={1}"
+aquest_path = "/home/pi/Programs/aquestalkpi/" #AquesTalkPi path
 
 def getWeatherForecast():
     url = API_URL.format(ZIP, API_KEY)
@@ -78,7 +79,9 @@ while True:
     lcd.write('{}'.format(t))
     lcd.set_cursor_position(0, 2)
     lcd.write('W:{1}C {2}mm'.format(round(temperature,0), rainfall))
-
+    if rainfall > 0:
+          print(weatherDescription, rainfall)
+          os.system(aquest_path+'AquesTalkPi '+weatherDescription+' | aplay')
           
     human = GPIO.input(human_pin)
     if human == 1:
@@ -104,10 +107,9 @@ while True:
         sensors = dict()
         for (adtype, desc, val) in dev.getScanData():
             print("  %s = %s" % (desc, val))
-            if desc == 'Short Local Name' and val[0:18] == 'ROHMMedal2_0107_01': #val[0:10] == 'ROHMMedal2':
+            if desc == 'Short Local Name' and val[0:10] == 'ROHMMedal2':
                 isRohmMedal = True
             if isRohmMedal and desc == 'Manufacturer':
-
                 # センサ値を辞書型変数sensorsへ代入
                 sensors['ID'] = hex(payval(2,2))
                 sensors['Temperature'] = -45 + 175 * payval(4,2) / 65536
@@ -138,18 +140,19 @@ while True:
                 backlight.rgb(0, 0, 0)
                 if temp > 28 or humid > 80:
                     temp_msg = "Hot!"
-                    backlight.rgb(255, 0, 0)
+                    backlight.rgb(255, 0, 0) #Red
                 else:
-                    temp_msg = "Comfort"
+                    temp_msg = "Not bad"
+          
                 illum = sensors['Illuminance']
-                if illum < 300:
+                if illum < 200:
                     illum_msg = "Dark!"
                     os.system("sudo hub-ctrl -b 1 -d 2 -P 2 -p 1")
                     backlight.rgb(255, 255, 255)
                 else:
                     illum_msg = "Bright"
                     os.system("sudo hub-ctrl -b 1 -d 2 -P 2 -p 0")
-                    backlight.rgb(0, 0, 255)
+                    backlight.rgb(0, 0, 255) #Blue
 
                 human_msg = str(human_count)
                 dothat.backlight.off()
@@ -157,12 +160,11 @@ while True:
                     backlight.graph_set_led_state(led, 0.2)
                 if human_count > human_check:
                     human_msg += ' Take Rest!'
-                    lcd.clear()
-                    backlight.rgb(0, 255, 0)
+                    backlight.rgb(0, 255, 0) #Green
+                    os.system(aquest_path+'AquesTalkPi "休憩しましょう！" | aplay')
                 else:
                     human_msg += ' Work Hard!'
-                    lcd.clear()
-                    backlight.rgb(0, 255, 255)
+                    backlight.rgb(0, 255, 255) #Lightblue
 
                 lcd.clear()
                 lcd.set_cursor_position(0, 0)
