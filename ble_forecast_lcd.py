@@ -2,27 +2,10 @@
 # coding: utf-8
 from __future__ import (division, absolute_import, print_function,
                                 unicode_literals)
-import fcntl
-import socket
-import struct
 
 import dothat
 import dothat.backlight as backlight
 import dothat.lcd as lcd
-
-def get_addr(ifname):
-    try:
-        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        return socket.inet_ntoa(
-            fcntl.ioctl(
-                s.fileno(),
-                0x8915,  # SIOCGIFADDR
-                struct.pack('256s', ifname[:15].encode('utf-8')))[20:24])
-    except IOError:
-        return 'Not Found!'
-
-eth0 = get_addr('eth0')
-host = socket.gethostname()
 
 interval = 10 # 動作間隔
 
@@ -86,16 +69,17 @@ while True:
     now = datetime.now()
     d = '{0:0>4d}/{1:0>2d}/{2:0>2d}({3})'.format(now.year, now.month, now.day, now.strftime('%a'))
     t = '{0:0>2d}:{1:0>2d}:{2:0>2d}'.format(now.hour, now.minute, now.second)
-    wlan0 = get_addr('wlan0')
+    forecastDatetime, weatherDescription, temperature, rainfall = getWeatherForecast()
 
     lcd.clear()
     lcd.set_cursor_position(0, 0)
-    lcd.write('{}'.format(wlan0))
-    lcd.set_cursor_position(0, 1)
     lcd.write('{}'.format(d))
-    lcd.set_cursor_position(2, 2)
+    lcd.set_cursor_position(2, 1)
     lcd.write('{}'.format(t))
+    lcd.set_cursor_position(0, 2)
+    lcd.write('W:{1}C {2}mm'.format(round(temperature,0), rainfall))
 
+          
     human = GPIO.input(human_pin)
     if human == 1:
       human_count+=1
