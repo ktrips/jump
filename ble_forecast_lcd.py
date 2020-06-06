@@ -24,7 +24,6 @@ human_count = 0
 human_check = 3
 
 import json
-import datetime
 import requests
 import sys
 
@@ -44,7 +43,7 @@ def getWeatherForecast():
             return                        
     #print(forecastData)
     for item in forecastData['list']:
-        forecastDatetime = timezone('Asia/Tokyo').localize(datetime.datetime.fromtimestamp(item['dt']))
+        forecastDatetime = timezone('Asia/Tokyo').localize(datetime.fromtimestamp(item['dt']))
         weatherDescription = item['weather'][0]['description']
         temperature = item['main']['temp']
         rainfall = 0
@@ -52,7 +51,7 @@ def getWeatherForecast():
             rainfall = item['rain']['3h']
         break
 
-    print('Date:{0} Weather:{1} Temp:{2} C Rain:{3}mm'.format(forecastDatetime, weatherDescription, temperature, rainfall)
+    print('Date:{0} Weather:{1} Temp:{2} C Rain:{3}mm'.format(forecastDatetime, weatherDescription, temperature, rainfall))
     return forecastDatetime, weatherDescription, temperature, rainfall
 
 def payval(num, bytes=1, sign=False):
