@@ -85,9 +85,9 @@ def line_message(text):
 
 
 from spreadsheet import SpreadSheet
-spreadsheet_name  = '1a_PQovhySYPV5D-rGhs1Soh7pvhGWmVltSPsSX_VmuA'
-key_name = json_dir+'raspberryai-62aca965a8af.json'
-sheet_name= 'raspi-jump-drive' #Sheet1' # シート名
+spreadsheet_name  = 'xxx'
+key_name = json_dir+'yyy.json'
+sheet_name= 'zzz' #Sheet1' # シート名
 
 sheet = SpreadSheet(spreadsheet_name) #'1a_PQovhySYPV5D-rGhs1Soh7pvhGWmVltSPsSX_VmuA')
 
