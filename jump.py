@@ -74,7 +74,7 @@ import requests
 
 def line_message(text):
     url    = "https://notify-api.line.me/api/notify"
-    token  = "Zaj0BRu04W1aofVIm2AIxGdhuwI5fUayF9ji8sCBpru"
+    token  = "aaaa"
     headers= {"Authorization":"Bearer "+token,
             "Content-Type":"application/x-www-form-urlencoded"}
     #message = 'message送信！'
@@ -89,7 +89,7 @@ spreadsheet_name  = 'xxx'
 key_name = json_dir+'yyy.json'
 sheet_name= 'zzz' #Sheet1' # シート名
 
-sheet = SpreadSheet(spreadsheet_name) #'1a_PQovhySYPV5D-rGhs1Soh7pvhGWmVltSPsSX_VmuA')
+sheet = SpreadSheet(spreadsheet_name)
 
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
@@ -119,13 +119,6 @@ root.attributes("-zoomed", "1")
 
 # 常に最前面に表示
 root.attributes("-topmost", True)
-
-"""def cupdate():
-    # 現在時刻を表示
-    now = datetime.now()
-    d = '{0:0>4d}/{1:0>2d}/{2:0>2d} ({3}.)'.format(now.year, now.month, now.day, now.strftime('%a'))
-    t = '{0:0>2d}:{1:0>2d}:{2:0>2d}'.format(now.hour, now.minute, now.second)
-"""
 
 start_seq = 0
 start_text= 'ボタンを押して、ジャンプスタート！'
@@ -262,53 +255,19 @@ while True:
                     last_cal = cur_cal
                     last_mv  = cur_mv
 
-                    """lcd.clear()
-                    lcd.set_cursor_position(0,0)
-                    lcd.write(time_text)
-                    lcd.set_cursor_position(0,1)
-                    lcd.write(dur_text)
-                    lcd.set_cursor_position(0,2)
-                    lcd.write(jump_text)"""
-
                 sensors['Battery Level'] = payval(30)
                 sensors['RSSI'] = dev.rssi
 
                 # 画面へ表示
                 #print('    ID            =',sensors['ID'])
                 print('    SEQ           =',sensors['SEQ'])
-                """print('    Temperature   =',round(sensors['Temperature'],2),'℃')
-                print('    Humidity      =',round(sensors['Humidity'],2),'%')
-                print('    Pressure      =',round(sensors['Pressure'],3),'hPa')
-                print('    Illuminance   =',round(sensors['Illuminance'],1),'lx')
-                print('    Accelerometer =',round(sensors['Accelerometer'],3),'g (',\
-                                            round(sensors['Accelerometer X'],3),\
-                                            round(sensors['Accelerometer Y'],3),\
-                                            round(sensors['Accelerometer Z'],3),'g)')
-                print('    Geomagnetic   =',round(sensors['Geomagnetic'],1),'uT (',\
-                                            round(sensors['Geomagnetic X'],1),\
-                                            round(sensors['Geomagnetic Y'],1),\
-                                            round(sensors['Geomagnetic Z'],1),'uT)')"""
-                #print('    Magnetic      =',sensors['Magnetic'])
                 print('    Steps         =',sensors['Steps'],'Cnt')
-
-                #print('    Battery Level =',sensors['Battery Level'],'%')
-                #print('    RSSI          =',sensors['RSSI'],'dB')
 
                 '''
                 for key, value in sorted(sensors.items(), key=lambda x:x[0]):
                     print('    ',key,'=',value)
                 '''
-
-    #c.itemconfigure(ch, text='Jump!')
-    #c.itemconfigure(cd, text=d)
-    #c.itemconfigure(ct, text=t)
                 c.update()
-
-    # 1秒間隔で繰り返す
-    #root.after(1000, cupdate)
-
-# コールバック関数を登録
-#root.after(1000, cupdate)
 
 # メインループ
 root.mainloop()
